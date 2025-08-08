@@ -1,23 +1,29 @@
-// Минимальное расширение VS Code для вывода Hello World
+// extension.ts
 import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log("Hello World 3");
+  console.log("HELLLLO WORLD");
+  // Команда без аргумента
+  // vscode.commands.executeCommand("workbench.action.chat.open");
 
-  // Показать уведомление с Hello World
-  vscode.window.showInformationMessage("Hello World! 1");
+  vscode.commands.executeCommand("workbench.action.chat.open", "Hello");
 
-  // Каждые 5 секунд показывать сообщение
-  const interval = setInterval(() => {
-    vscode.window.showInformationMessage("Hello World! 2");
-  }, 5000);
+  // Команда с промптом
+  // const openChatWithPrompt = vscode.commands.registerCommand(
+  //   "myext.openChatWithPrompt",
+  //   async () => {
+  //     const prompt = await vscode.window.showInputBox({
+  //       prompt: "Введите промпт для Copilot",
+  //     });
+  //     if (prompt) {
+  //       vscode.commands.executeCommand("workbench.action.chat.open", prompt);
+  //     }
+  //   }
+  // );
 
-  // Очистка таймера при деактивации
-  context.subscriptions.push({
-    dispose: () => clearInterval(interval),
-  });
+  // context.subscriptions.push(openChat, openChatWithPrompt);
 }
 
 export function deactivate() {
-  console.log("Extension deactivated");
+  console.log("Text Trigger extension is now deactivated");
 }
