@@ -2,9 +2,14 @@
 
 > Auto-Continue Extension for VS Code/Cursor AI Conversations
 
+[![VS Code Marketplace](https://img.shields.io/vscode-marketplace/v/dealenx.go-auto-continue?style=flat-square&logo=visual-studio-code&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
+[![VS Code Marketplace Downloads](https://img.shields.io/vscode-marketplace/d/dealenx.go-auto-continue?style=flat-square&color=28a745)](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
+[![VS Code Marketplace Rating](https://img.shields.io/vscode-marketplace/r/dealenx.go-auto-continue?style=flat-square&color=ff9500)](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
+[![GitHub](https://img.shields.io/github/license/dealenx/go-auto-continue?style=flat-square&color=blue)](https://github.com/dealenx/go-auto-continue)
 
 ![Go Auto Continue Extension](resources/screen.png)
 *Control panel interface showing start/stop functionality and settings*
+
 
 
 
@@ -34,6 +39,23 @@ https://private-user-images.githubusercontent.com/4071686/476383611-b3856516-54d
 - 🔄 **Quick Commands**: Fast control through VS Code command palette
 
 ## 📦 Installation
+
+### Install from VS Code Marketplace
+
+[![Install from VS Code Marketplace](https://img.shields.io/badge/Install-VS%20Code%20Marketplace-blue?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
+
+**Quick Install:**
+1. Open VS Code
+2. Go to Extensions (Ctrl+Shift+X)
+3. Search for "Go Auto Continue"
+4. Click Install
+
+**Or install via command line:**
+```bash
+code --install-extension dealenx.go-auto-continue
+```
+
+### Development Installation
 
 1. **Clone the repository**:
    ```bash
