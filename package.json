@@ -1,5 +1,5 @@
 {
-  "name": "auto-continue",
+  "name": "go-auto-continue",
   "displayName": "🤖 Авто Продолжение Чата",
   "description": "Простое расширение для автоматического продолжения диалога с ИИ",
   "version": "0.0.2",
@@ -18,36 +18,36 @@
     "диалог"
   ],
   "activationEvents": [
-    "onView:autoContinueView"
+    "onView:goAutoContinueView"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "autoContinue.start",
+        "command": "goAutoContinue.start",
         "title": "🚀 Запустить Авто Продолжение",
         "icon": "$(play)"
       },
       {
-        "command": "autoContinue.stop",
+        "command": "goAutoContinue.stop",
         "title": "🛑 Остановить Авто Продолжение",
         "icon": "$(stop)"
       },
       {
-        "command": "autoContinue.toggle",
+        "command": "goAutoContinue.toggle",
         "title": "🔄 Переключить Авто Продолжение",
         "icon": "$(play-circle)"
       },
       {
-        "command": "autoContinue.openSettings",
+        "command": "goAutoContinue.openSettings",
         "title": "⚙️ Открыть настройки",
         "icon": "$(gear)"
       }
     ],
     "views": {
-      "autoContinueContainer": [
+      "goAutoContinueContainer": [
         {
-          "id": "autoContinueView",
+          "id": "goAutoContinueView",
           "name": "🎮 Панель Управления",
           "when": "true"
         }
@@ -56,46 +56,46 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "autoContinueContainer",
-          "title": "Auto Continue",
+          "id": "goAutoContinueContainer",
+          "title": "Go Auto Continue",
           "icon": "$(robot)"
         }
       ]
     },
     "configuration": {
-      "title": "Auto Continue",
+      "title": "Go Auto Continue",
       "properties": {
-        "autoContinue.interval": {
+        "goAutoContinue.interval": {
           "type": "number",
           "default": 10,
           "minimum": 1,
           "maximum": 60,
           "description": "Интервал между сообщениями в секундах. По умолчанию 10 секунд."
         },
-        "autoContinue.message": {
+        "goAutoContinue.message": {
           "type": "string",
-          "default": "расскажи еще",
-          "description": "Фраза, которая будет отправляться в чат. По умолчанию 'расскажи еще'."
+          "default": "continue",
+          "description": "Фраза, которая будет отправляться в чат. По умолчанию 'continue'."
         }
       }
     },
     "menus": {
       "view/title": [
         {
-          "command": "autoContinue.toggle",
-          "when": "view == autoContinueView",
+          "command": "goAutoContinue.toggle",
+          "when": "view == goAutoContinueView",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "autoContinue.start",
-          "when": "view == autoContinueView && viewItem == stopped",
+          "command": "goAutoContinue.start",
+          "when": "view == goAutoContinueView && viewItem == stopped",
           "group": "control"
         },
         {
-          "command": "autoContinue.stop",
-          "when": "view == autoContinueView && viewItem == running",
+          "command": "goAutoContinue.stop",
+          "when": "view == goAutoContinueView && viewItem == running",
           "group": "control"
         }
       ]

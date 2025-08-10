@@ -3,20 +3,20 @@ import * as vscode from "vscode";
 
 let continueInterval: NodeJS.Timeout | undefined;
 let isRunning = false;
-let treeDataProvider: AutoContinueTreeProvider;
+let treeDataProvider: GoAutoContinueTreeProvider;
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log("Auto Continue extension activated");
+  console.log("Go Auto Continue extension activated");
 
   // Создать Tree View Provider
-  treeDataProvider = new AutoContinueTreeProvider();
-  vscode.window.createTreeView("autoContinueView", {
+  treeDataProvider = new GoAutoContinueTreeProvider();
+  vscode.window.createTreeView("goAutoContinueView", {
     treeDataProvider: treeDataProvider,
   });
 
   // Команды для управления режимом
   const startCommand = vscode.commands.registerCommand(
-    "autoContinue.start",
+    "goAutoContinue.start",
     () => {
       startContinueMode();
       treeDataProvider.refresh();
@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const stopCommand = vscode.commands.registerCommand(
-    "autoContinue.stop",
+    "goAutoContinue.stop",
     () => {
       stopContinueMode();
       treeDataProvider.refresh();
@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Команда для переключения режима
   const toggleCommand = vscode.commands.registerCommand(
-    "autoContinue.toggle",
+    "goAutoContinue.toggle",
     () => {
       if (isRunning) {
         stopContinueMode();
@@ -46,11 +46,11 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Команда для открытия настроек
   const openSettingsCommand = vscode.commands.registerCommand(
-    "autoContinue.openSettings",
+    "goAutoContinue.openSettings",
     () => {
       vscode.commands.executeCommand(
         "workbench.action.openSettings",
-        "autoContinue"
+        "goAutoContinue"
       );
     }
   );
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Слушатель изменений настроек
   const configChangeListener = vscode.workspace.onDidChangeConfiguration(
     (event) => {
-      if (event.affectsConfiguration("autoContinue")) {
+      if (event.affectsConfiguration("goAutoContinue")) {
         treeDataProvider.refresh();
 
         // Если режим запущен, перезапускаем с новыми настройками
@@ -81,48 +81,48 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // Tree View Provider для боковой панели
-class AutoContinueTreeProvider
-  implements vscode.TreeDataProvider<AutoContinueItem>
+class GoAutoContinueTreeProvider
+  implements vscode.TreeDataProvider<GoAutoContinueItem>
 {
   private _onDidChangeTreeData: vscode.EventEmitter<
-    AutoContinueItem | undefined | null | void
-  > = new vscode.EventEmitter<AutoContinueItem | undefined | null | void>();
+    GoAutoContinueItem | undefined | null | void
+  > = new vscode.EventEmitter<GoAutoContinueItem | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<
-    AutoContinueItem | undefined | null | void
+    GoAutoContinueItem | undefined | null | void
   > = this._onDidChangeTreeData.event;
 
   refresh(): void {
     this._onDidChangeTreeData.fire();
   }
 
-  getTreeItem(element: AutoContinueItem): vscode.TreeItem {
+  getTreeItem(element: GoAutoContinueItem): vscode.TreeItem {
     return element;
   }
 
-  getChildren(): AutoContinueItem[] {
-    const items: AutoContinueItem[] = [];
+  getChildren(): GoAutoContinueItem[] {
+    const items: GoAutoContinueItem[] = [];
 
     // Главная кнопка управления
     if (isRunning) {
       items.push(
-        new AutoContinueItem(
+        new GoAutoContinueItem(
           "🛑 ОСТАНОВИТЬ",
           "Нажмите, чтобы остановить автоматическое продолжение",
           vscode.TreeItemCollapsibleState.None,
           {
-            command: "autoContinue.stop",
+            command: "goAutoContinue.stop",
             title: "Остановить",
           }
         )
       );
     } else {
       items.push(
-        new AutoContinueItem(
+        new GoAutoContinueItem(
           "🚀 ЗАПУСТИТЬ",
           "Нажмите, чтобы начать автоматическое продолжение диалога",
           vscode.TreeItemCollapsibleState.None,
           {
-            command: "autoContinue.start",
+            command: "goAutoContinue.start",
             title: "Запустить",
           }
         )
@@ -130,17 +130,17 @@ class AutoContinueTreeProvider
     }
 
     // Настройки
-    const config = vscode.workspace.getConfiguration("autoContinue");
+    const config = vscode.workspace.getConfiguration("goAutoContinue");
     const intervalSeconds = config.get<number>("interval", 10);
-    const message = config.get<string>("message", "расскажи еще");
+    const message = config.get<string>("message", "continue");
 
     items.push(
-      new AutoContinueItem(
+      new GoAutoContinueItem(
         "⚙️ Настройки",
         `Интервал: ${intervalSeconds}с | Фраза: "${message}" | Нажмите для изменения`,
         vscode.TreeItemCollapsibleState.None,
         {
-          command: "autoContinue.openSettings",
+          command: "goAutoContinue.openSettings",
           title: "Открыть настройки",
         }
       )
@@ -150,7 +150,7 @@ class AutoContinueTreeProvider
   }
 }
 
-class AutoContinueItem extends vscode.TreeItem {
+class GoAutoContinueItem extends vscode.TreeItem {
   constructor(
     public readonly label: string,
     public readonly tooltip: string,
@@ -169,9 +169,9 @@ function startContinueMode() {
   }
 
   // Получаем настройки
-  const config = vscode.workspace.getConfiguration("autoContinue");
+  const config = vscode.workspace.getConfiguration("goAutoContinue");
   const intervalSeconds = config.get<number>("interval", 10);
-  const message = config.get<string>("message", "расскажи еще");
+  const message = config.get<string>("message", "continue");
 
   isRunning = true;
   continueInterval = setInterval(() => {
@@ -179,7 +179,7 @@ function startContinueMode() {
   }, intervalSeconds * 1000); // Конвертируем секунды в миллисекунды
 
   vscode.window.showInformationMessage(
-    `🚀 Auto Continue запущен! Фраза "${message}" будет отправляться каждые ${intervalSeconds} секунд.`
+    `🚀 Go Auto Continue запущен! Фраза "${message}" будет отправляться каждые ${intervalSeconds} секунд.`
   );
   treeDataProvider.refresh();
 }
@@ -195,11 +195,11 @@ function stopContinueMode() {
     continueInterval = undefined;
   }
 
-  vscode.window.showInformationMessage("Auto Continue mode stopped!");
+  vscode.window.showInformationMessage("Go Auto Continue mode stopped!");
   treeDataProvider.refresh();
 }
 
 export function deactivate() {
   stopContinueMode();
-  console.log("Auto Continue extension deactivated");
+  console.log("Go Auto Continue extension deactivated");
 }
