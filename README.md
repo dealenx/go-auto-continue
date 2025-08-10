@@ -1,6 +1,6 @@
 # 🤖 Go Auto Continue
 
-> Auto-Continue Extension for VS Code/Cursor AI Conversations
+> Auto-Continue Extension for VS Code AI Conversations
 
 [![VS Code Marketplace](https://img.shields.io/vscode-marketplace/v/dealenx.go-auto-continue?style=flat-square&logo=visual-studio-code&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
 [![VS Code Marketplace Downloads](https://img.shields.io/vscode-marketplace/d/dealenx.go-auto-continue?style=flat-square&color=28a745)](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
@@ -109,7 +109,7 @@ Available settings:
 
 ## 🚀 Usage
 
-1. Open VS Code/Cursor with an AI chat active
+1. Open VS Code with an AI chat active
 2. Look for the GO icon in the Activity Bar (left sidebar)
 3. Click to open the control panel
 4. Click "START" to begin auto-continue mode
