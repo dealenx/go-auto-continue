@@ -4,6 +4,8 @@ import * as vscode from "vscode";
 let continueInterval: NodeJS.Timeout | undefined;
 let isRunning = false;
 let treeDataProvider: AutoContinueTreeProvider;
+let messageCount = 0;
+let startTime: Date | undefined;
 
 export function activate(context: vscode.ExtensionContext) {
   console.log("Auto Continue extension activated");
@@ -69,47 +71,81 @@ class AutoContinueTreeProvider
   getChildren(): AutoContinueItem[] {
     const items: AutoContinueItem[] = [];
 
-    // Статус
+    // Статус с дополнительной информацией
+    if (isRunning && startTime) {
+      const elapsed = Math.floor((Date.now() - startTime.getTime()) / 1000);
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+
+      items.push(
+        new AutoContinueItem(
+          "🟢 РАБОТАЕТ",
+          `Время работы: ${minutes}м ${seconds}с | Отправлено сообщений: ${messageCount}`,
+          vscode.TreeItemCollapsibleState.None
+        )
+      );
+    } else {
+      items.push(
+        new AutoContinueItem(
+          "⭕ ОСТАНОВЛЕН",
+          "Нажмите 'ЗАПУСТИТЬ' чтобы начать",
+          vscode.TreeItemCollapsibleState.None
+        )
+      );
+    }
+
+    // Крупный статус с цветной индикацией
     items.push(
       new AutoContinueItem(
-        isRunning ? "🟢 Running" : "🔴 Stopped",
-        isRunning ? "Auto continue is active" : "Auto continue is stopped",
+        isRunning ? "🟢 АКТИВЕН" : "⭕ ОСТАНОВЛЕН",
+        isRunning
+          ? "Автоматическое продолжение диалога работает"
+          : "Автоматическое продолжение диалога остановлено",
         vscode.TreeItemCollapsibleState.None
       )
     );
 
-    // Кнопки управления
+    // Главная кнопка управления
     if (isRunning) {
       items.push(
         new AutoContinueItem(
-          "⏹️ Stop Continue",
-          "Stop automatic continue",
+          "🛑 ОСТАНОВИТЬ",
+          "Нажмите, чтобы остановить автоматическое продолжение",
           vscode.TreeItemCollapsibleState.None,
           {
             command: "autoContinue.stop",
-            title: "Stop",
+            title: "Остановить",
           }
         )
       );
     } else {
       items.push(
         new AutoContinueItem(
-          "▶️ Start Continue",
-          "Start automatic continue",
+          "🚀 ЗАПУСТИТЬ",
+          "Нажмите, чтобы начать автоматическое продолжение диалога",
           vscode.TreeItemCollapsibleState.None,
           {
             command: "autoContinue.start",
-            title: "Start",
+            title: "Запустить",
           }
         )
       );
     }
 
-    // Информация
+    // Настройки (будущее улучшение)
     items.push(
       new AutoContinueItem(
-        "ℹ️ Info",
-        "Sends 'continue' every 10 seconds",
+        "⚙️ Настройки",
+        "Интервал: 10 секунд (кликните для изменения)",
+        vscode.TreeItemCollapsibleState.None
+      )
+    );
+
+    // Помощь
+    items.push(
+      new AutoContinueItem(
+        "❓ Как это работает?",
+        "Расширение автоматически отправляет 'continue' в чат каждые 10 секунд",
         vscode.TreeItemCollapsibleState.None
       )
     );
@@ -131,21 +167,58 @@ class AutoContinueItem extends vscode.TreeItem {
   }
 }
 
+// Улучшенные функции с лучшей обратной связью
 function startContinueMode() {
   if (isRunning) {
+    vscode.window.showWarningMessage("⚠️ Авто продолжение уже запущено!");
     return;
   }
 
   isRunning = true;
-  continueInterval = setInterval(() => {
-    vscode.commands.executeCommand("workbench.action.chat.open", "continue");
-  }, 10000); // 10 секунд
+  messageCount = 0;
+  startTime = new Date();
 
-  vscode.window.showInformationMessage("Auto Continue mode started!");
+  // Показать прогресс запуска
+  vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: "🚀 Запуск авто продолжения...",
+      cancellable: false,
+    },
+    async (progress) => {
+      progress.report({ increment: 50, message: "Инициализация..." });
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      continueInterval = setInterval(() => {
+        vscode.commands.executeCommand(
+          "workbench.action.chat.open",
+          "continue"
+        );
+        messageCount++;
+        treeDataProvider.refresh(); // Обновить счетчик
+      }, 10000);
+
+      // Обновлять время каждую секунду
+      setInterval(() => {
+        if (isRunning) {
+          treeDataProvider.refresh();
+        }
+      }, 1000);
+
+      progress.report({ increment: 50, message: "Готово!" });
+    }
+  );
+
+  vscode.window.showInformationMessage(
+    "✅ Авто продолжение запущено! Команда 'continue' будет отправляться каждые 10 секунд.",
+    "Понятно"
+  );
 }
 
 function stopContinueMode() {
   if (!isRunning) {
+    vscode.window.showWarningMessage("⚠️ Авто продолжение уже остановлено!");
     return;
   }
 
@@ -155,7 +228,10 @@ function stopContinueMode() {
     continueInterval = undefined;
   }
 
-  vscode.window.showInformationMessage("Auto Continue mode stopped!");
+  vscode.window.showInformationMessage(
+    "🛑 Авто продолжение остановлено!",
+    "Понятно"
+  );
 }
 
 export function deactivate() {

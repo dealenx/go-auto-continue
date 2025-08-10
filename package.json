@@ -1,13 +1,21 @@
 {
   "name": "auto-continue",
-  "displayName": "Auto Continue",
-  "description": "Automatically continue chat dialog",
-  "version": "0.0.1",
+  "displayName": "🤖 Авто Продолжение Чата",
+  "description": "Простое расширение для автоматического продолжения диалога с ИИ",
+  "version": "0.0.2",
+  "publisher": "your-name",
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "chat",
+    "ai",
+    "automation",
+    "continue",
+    "диалог"
   ],
   "activationEvents": [
     "onView:autoContinueView"
@@ -17,17 +25,17 @@
     "commands": [
       {
         "command": "autoContinue.start",
-        "title": "Start Auto Continue",
+        "title": "🚀 Запустить Авто Продолжение",
         "icon": "$(play)"
       },
       {
         "command": "autoContinue.stop",
-        "title": "Stop Auto Continue",
+        "title": "🛑 Остановить Авто Продолжение",
         "icon": "$(stop)"
       },
       {
         "command": "autoContinue.toggle",
-        "title": "Toggle Auto Continue",
+        "title": "🔄 Переключить Авто Продолжение",
         "icon": "$(play-circle)"
       }
     ],
@@ -35,7 +43,7 @@
       "autoContinueContainer": [
         {
           "id": "autoContinueView",
-          "name": "Control Panel",
+          "name": "🎮 Панель Управления",
           "when": "true"
         }
       ]
@@ -44,7 +52,7 @@
       "activitybar": [
         {
           "id": "autoContinueContainer",
-          "title": "Auto Continue",
+          "title": "🤖 Авто Продолжение",
           "icon": "$(robot)"
         }
       ]
@@ -55,6 +63,18 @@
           "command": "autoContinue.toggle",
           "when": "view == autoContinueView",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "autoContinue.start",
+          "when": "view == autoContinueView && viewItem == stopped",
+          "group": "control"
+        },
+        {
+          "command": "autoContinue.stop",
+          "when": "view == autoContinueView && viewItem == running",
+          "group": "control"
         }
       ]
     }
