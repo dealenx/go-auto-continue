@@ -2,7 +2,7 @@
   "name": "go-auto-continue",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "publisher": "dealenx",
   "engines": {
     "vscode": "^1.74.0"
