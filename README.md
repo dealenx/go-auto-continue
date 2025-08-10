@@ -6,9 +6,23 @@
 ![Go Auto Continue Extension](resources/screen.png)
 *Control panel interface showing start/stop functionality and settings*
 
+
+
 ## 📝 Description
 
 A lightweight VS Code extension that automatically helps you continue AI conversations when they hit limitations or pause. Perfect for seamless workflow with AI coding assistants like Cursor.
+
+## Demo 
+
+https://github.com/dealenx/go-auto-continue/assets/user-attachments/assets/demo-video.mp4
+
+*Watch the extension in action: automatic chat continuation*
+
+### Key Features Demonstrated:
+- 🎮 **Easy Control**: One-click start/stop from sidebar
+- ⚙️ **Configurable Settings**: Custom intervals and messages  
+- 🔄 **Real-time Status**: Visual feedback when active
+- 🌍 **Multilingual UI**: Interface adapts to your language
 
 ## 🚀 Features
 
