@@ -14,7 +14,7 @@ A lightweight VS Code extension that automatically helps you continue AI convers
 
 ## Demo 
 
-https://github.com/dealenx/go-auto-continue/raw/refs/heads/main/resources/Code%202025-08-11v2.mp4
+https://private-user-images.githubusercontent.com/4071686/476383611-b3856516-54d0-43db-be6e-8b87342e67b4.mp4
 
 *Watch the extension in action: automatic chat continuation*
 
