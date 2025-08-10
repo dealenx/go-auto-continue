@@ -16,24 +16,26 @@
   "contributes": {
     "commands": [
       {
-        "command": "autoContinue.openPanel",
-        "title": "Open Auto Continue Panel",
+        "command": "autoContinue.start",
+        "title": "Start Auto Continue",
         "icon": "$(play)"
       },
       {
-        "command": "autoContinue.start",
-        "title": "Start Auto Continue"
+        "command": "autoContinue.stop",
+        "title": "Stop Auto Continue",
+        "icon": "$(stop)"
       },
       {
-        "command": "autoContinue.stop",
-        "title": "Stop Auto Continue"
+        "command": "autoContinue.toggle",
+        "title": "Toggle Auto Continue",
+        "icon": "$(play-circle)"
       }
     ],
     "views": {
       "autoContinueContainer": [
         {
           "id": "autoContinueView",
-          "name": "Auto Continue",
+          "name": "Control Panel",
           "when": "true"
         }
       ]
@@ -50,7 +52,7 @@
     "menus": {
       "view/title": [
         {
-          "command": "autoContinue.openPanel",
+          "command": "autoContinue.toggle",
           "when": "view == autoContinueView",
           "group": "navigation"
         }
