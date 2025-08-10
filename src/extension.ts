@@ -7,7 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
   // vscode.commands.executeCommand("workbench.action.chat.open");
 
   setInterval(() => {
-    vscode.commands.executeCommand("workbench.action.chat.open", "Hello");
+    vscode.commands.executeCommand("workbench.action.chat.open", "continue");
   }, 10000);
 }
 
