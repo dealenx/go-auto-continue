@@ -58,7 +58,7 @@
         {
           "id": "goAutoContinueContainer",
           "title": "%view.container.title%",
-          "icon": "$(robot)"
+          "icon": "./resources/go-icon.svg"
         }
       ]
     },
