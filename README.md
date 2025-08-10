@@ -142,16 +142,44 @@ npm run watch  # For development
 ```
 
 
-## 🤝 Contributing
+## 🚀 Development & Releases
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+### Installing from VSIX
 
-### Development Setup
+1. Download the latest `.vsix` file from [GitHub Releases](https://github.com/dealenx/go-auto-continue/releases)
+2. Open VS Code
+3. Go to Extensions view (`Ctrl+Shift+X`)
+4. Click "..." menu → "Install from VSIX..."
+5. Select the downloaded `.vsix` file
+
+### Contributing
+
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/dealenx/go-auto-continue.git
+cd go-auto-continue
+
+# Install dependencies
+npm install
+
+# Build the extension
+npm run compile
+
+# Package for testing
+npm run package
+
+# Test locally
+.
+elease-test.ps1 -Version 0.0.3 -Install
+```
 
 ## 📄 License
 
