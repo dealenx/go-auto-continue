@@ -1,9 +1,9 @@
 {
   "name": "go-auto-continue",
-  "displayName": "🤖 Авто Продолжение Чата",
-  "description": "Простое расширение для автоматического продолжения диалога с ИИ",
+  "displayName": "%displayName%",
+  "description": "%description%",
   "version": "0.0.2",
-  "publisher": "your-name",
+  "publisher": "dealenx",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -14,8 +14,8 @@
     "chat",
     "ai",
     "automation",
-    "continue",
-    "диалог"
+    "auto-continue",
+    "continue"
   ],
   "activationEvents": [
     "onView:goAutoContinueView"
@@ -25,22 +25,22 @@
     "commands": [
       {
         "command": "goAutoContinue.start",
-        "title": "🚀 Запустить Авто Продолжение",
+        "title": "%command.start.title%",
         "icon": "$(play)"
       },
       {
         "command": "goAutoContinue.stop",
-        "title": "🛑 Остановить Авто Продолжение",
+        "title": "%command.stop.title%",
         "icon": "$(stop)"
       },
       {
         "command": "goAutoContinue.toggle",
-        "title": "🔄 Переключить Авто Продолжение",
+        "title": "%command.toggle.title%",
         "icon": "$(play-circle)"
       },
       {
         "command": "goAutoContinue.openSettings",
-        "title": "⚙️ Открыть настройки",
+        "title": "%command.openSettings.title%",
         "icon": "$(gear)"
       }
     ],
@@ -48,7 +48,7 @@
       "goAutoContinueContainer": [
         {
           "id": "goAutoContinueView",
-          "name": "🎮 Панель Управления",
+          "name": "%view.name%",
           "when": "true"
         }
       ]
@@ -57,25 +57,25 @@
       "activitybar": [
         {
           "id": "goAutoContinueContainer",
-          "title": "Go Auto Continue",
+          "title": "%view.container.title%",
           "icon": "$(robot)"
         }
       ]
     },
     "configuration": {
-      "title": "Go Auto Continue",
+      "title": "%config.title%",
       "properties": {
         "goAutoContinue.interval": {
           "type": "number",
           "default": 10,
           "minimum": 1,
           "maximum": 60,
-          "description": "Интервал между сообщениями в секундах. По умолчанию 10 секунд."
+          "description": "%config.interval.description%"
         },
         "goAutoContinue.message": {
           "type": "string",
           "default": "continue",
-          "description": "Фраза, которая будет отправляться в чат. По умолчанию 'continue'."
+          "description": "%config.message.description%"
         }
       }
     },

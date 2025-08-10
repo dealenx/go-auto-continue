@@ -1,0 +1,13 @@
+{
+  "displayName": "🤖 Auto Chat Continue",
+  "description": "Simple extension for automatic AI chat continuation",
+  "command.start.title": "🚀 Start Auto Continue",
+  "command.stop.title": "🛑 Stop Auto Continue",
+  "command.toggle.title": "🔄 Toggle Auto Continue",
+  "command.openSettings.title": "⚙️ Open Settings",
+  "view.name": "🎮 Control Panel",
+  "view.container.title": "Go Auto Continue",
+  "config.title": "Go Auto Continue",
+  "config.interval.description": "Interval between messages in seconds. Default is 10 seconds.",
+  "config.message.description": "Phrase that will be sent to the chat. Default is 'continue'."
+}

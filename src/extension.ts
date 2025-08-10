@@ -1,12 +1,13 @@
 // extension.ts
 import * as vscode from "vscode";
+import { t } from "./i18n";
 
 let continueInterval: NodeJS.Timeout | undefined;
 let isRunning = false;
 let treeDataProvider: GoAutoContinueTreeProvider;
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log("Go Auto Continue extension activated");
+  console.log(t('extension.activated'));
 
   // Создать Tree View Provider
   treeDataProvider = new GoAutoContinueTreeProvider();
@@ -106,24 +107,24 @@ class GoAutoContinueTreeProvider
     if (isRunning) {
       items.push(
         new GoAutoContinueItem(
-          "🛑 ОСТАНОВИТЬ",
-          "Нажмите, чтобы остановить автоматическое продолжение",
+          t('button.stop'),
+          t('tooltip.stop'),
           vscode.TreeItemCollapsibleState.None,
           {
             command: "goAutoContinue.stop",
-            title: "Остановить",
+            title: t('action.stop'),
           }
         )
       );
     } else {
       items.push(
         new GoAutoContinueItem(
-          "🚀 ЗАПУСТИТЬ",
-          "Нажмите, чтобы начать автоматическое продолжение диалога",
+          t('button.start'),
+          t('tooltip.start'),
           vscode.TreeItemCollapsibleState.None,
           {
             command: "goAutoContinue.start",
-            title: "Запустить",
+            title: t('action.start'),
           }
         )
       );
@@ -136,12 +137,12 @@ class GoAutoContinueTreeProvider
 
     items.push(
       new GoAutoContinueItem(
-        "⚙️ Настройки",
-        `Интервал: ${intervalSeconds}с | Фраза: "${message}" | Нажмите для изменения`,
+        t('button.settings'),
+        t('tooltip.settings', intervalSeconds.toString(), message),
         vscode.TreeItemCollapsibleState.None,
         {
           command: "goAutoContinue.openSettings",
-          title: "Открыть настройки",
+          title: t('action.openSettings'),
         }
       )
     );
@@ -179,7 +180,7 @@ function startContinueMode() {
   }, intervalSeconds * 1000); // Конвертируем секунды в миллисекунды
 
   vscode.window.showInformationMessage(
-    `🚀 Go Auto Continue запущен! Фраза "${message}" будет отправляться каждые ${intervalSeconds} секунд.`
+    t('message.started', message, intervalSeconds.toString())
   );
   treeDataProvider.refresh();
 }
@@ -195,11 +196,11 @@ function stopContinueMode() {
     continueInterval = undefined;
   }
 
-  vscode.window.showInformationMessage("Go Auto Continue mode stopped!");
+  vscode.window.showInformationMessage(t('message.stopped'));
   treeDataProvider.refresh();
 }
 
 export function deactivate() {
   stopContinueMode();
-  console.log("Go Auto Continue extension deactivated");
+  console.log(t('extension.deactivated'));
 }
