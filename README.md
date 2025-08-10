@@ -1,4 +1,4 @@
-# Auto-Continue Extension for VS Code & Cursor
+# Auto-Continue Extension for VS Code
 
 # Quick Install Instructions for Auto-Continue Extension
 
