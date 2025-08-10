@@ -44,7 +44,40 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(startCommand, stopCommand, toggleCommand);
+  // Команда для открытия настроек
+  const openSettingsCommand = vscode.commands.registerCommand(
+    "autoContinue.openSettings",
+    () => {
+      vscode.commands.executeCommand(
+        "workbench.action.openSettings",
+        "autoContinue"
+      );
+    }
+  );
+
+  context.subscriptions.push(
+    startCommand,
+    stopCommand,
+    toggleCommand,
+    openSettingsCommand
+  );
+
+  // Слушатель изменений настроек
+  const configChangeListener = vscode.workspace.onDidChangeConfiguration(
+    (event) => {
+      if (event.affectsConfiguration("autoContinue")) {
+        treeDataProvider.refresh();
+
+        // Если режим запущен, перезапускаем с новыми настройками
+        if (isRunning) {
+          stopContinueMode();
+          startContinueMode();
+        }
+      }
+    }
+  );
+
+  context.subscriptions.push(configChangeListener);
 }
 
 // Tree View Provider для боковой панели
@@ -97,11 +130,19 @@ class AutoContinueTreeProvider
     }
 
     // Настройки
+    const config = vscode.workspace.getConfiguration("autoContinue");
+    const intervalSeconds = config.get<number>("interval", 10);
+    const message = config.get<string>("message", "расскажи еще");
+
     items.push(
       new AutoContinueItem(
         "⚙️ Настройки",
-        "Интервал: 10 секунд",
-        vscode.TreeItemCollapsibleState.None
+        `Интервал: ${intervalSeconds}с | Фраза: "${message}" | Нажмите для изменения`,
+        vscode.TreeItemCollapsibleState.None,
+        {
+          command: "autoContinue.openSettings",
+          title: "Открыть настройки",
+        }
       )
     );
 
@@ -127,15 +168,19 @@ function startContinueMode() {
     return;
   }
 
+  // Получаем настройки
+  const config = vscode.workspace.getConfiguration("autoContinue");
+  const intervalSeconds = config.get<number>("interval", 10);
+  const message = config.get<string>("message", "расскажи еще");
+
   isRunning = true;
   continueInterval = setInterval(() => {
-    vscode.commands.executeCommand(
-      "workbench.action.chat.open",
-      "расскажи еще"
-    );
-  }, 10000); // 10 секунд
+    vscode.commands.executeCommand("workbench.action.chat.open", message);
+  }, intervalSeconds * 1000); // Конвертируем секунды в миллисекунды
 
-  vscode.window.showInformationMessage("Auto Continue mode started!");
+  vscode.window.showInformationMessage(
+    `🚀 Auto Continue запущен! Фраза "${message}" будет отправляться каждые ${intervalSeconds} секунд.`
+  );
   treeDataProvider.refresh();
 }
 

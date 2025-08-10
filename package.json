@@ -37,6 +37,11 @@
         "command": "autoContinue.toggle",
         "title": "🔄 Переключить Авто Продолжение",
         "icon": "$(play-circle)"
+      },
+      {
+        "command": "autoContinue.openSettings",
+        "title": "⚙️ Открыть настройки",
+        "icon": "$(gear)"
       }
     ],
     "views": {
@@ -52,10 +57,27 @@
       "activitybar": [
         {
           "id": "autoContinueContainer",
-          "title": "🤖 Авто Продолжение",
+          "title": "Auto Continue",
           "icon": "$(robot)"
         }
       ]
+    },
+    "configuration": {
+      "title": "Auto Continue",
+      "properties": {
+        "autoContinue.interval": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 60,
+          "description": "Интервал между сообщениями в секундах. По умолчанию 10 секунд."
+        },
+        "autoContinue.message": {
+          "type": "string",
+          "default": "расскажи еще",
+          "description": "Фраза, которая будет отправляться в чат. По умолчанию 'расскажи еще'."
+        }
+      }
     },
     "menus": {
       "view/title": [
