@@ -1,161 +1,140 @@
-# Auto-Continue Extension for VS Code
+# 🤖 Go Auto Continue
 
-# Quick Install Instructions for Auto-Continue Extension
+> Auto-Continue Extension for VS Code/Cursor AI Conversations
 
-1. **Download the files** from the gist (extension.ts, package.json, and README.md)
 
-2. **Create a new VS Code extension project**:
+![Go Auto Continue Extension](resources/screen.png)
+*Control panel interface showing start/stop functionality and settings*
+
+## 📝 Description
+
+A lightweight VS Code extension that automatically helps you continue AI conversations when they hit limitations or pause. Perfect for seamless workflow with AI coding assistants like Cursor.
+
+## 🚀 Features
+
+- ⚡ **Auto-Continue**: Automatically sends "continue" command to AI chat
+- 🎮 **Control Panel**: Start/stop with one click from the sidebar
+- ⚙️ **Configurable Settings**: Customizable interval and message text
+- 🌍 **Multilingual UI**: Support for Russian and English interface
+- 🎨 **Custom Icon**: Stylish GO icon in the Activity Bar
+- 🔄 **Quick Commands**: Fast control through VS Code command palette
+
+## 📦 Installation
+
+1. **Clone the repository**:
    ```bash
-   npm init vscode-extension
-   # Choose TypeScript when prompted
+   git clone https://github.com/dealenx/go-auto-continue.git
+   cd go-auto-continue
    ```
 
-3. **Replace the files**:
-   - Replace the generated `extension.ts` with the one from the gist
-   - Replace the generated `package.json` with the one from the gist
-   - (Keep the README.md for reference)
-
-4. **Install dependencies and build**:
+2. **Install dependencies**:
    ```bash
    npm install
+   ```
+
+3. **Compile the extension**:
+   ```bash
    npm run compile
    ```
 
-5. **Test in development mode**:
-   - Press F5 in VS Code to launch a new window with the extension
-   - The extension will automatically detect AI pause messages and insert "continue"
+4. **Test in development mode**:
+   - Press `F5` in VS Code to launch Extension Development Host
 
-6. **To install permanently**:
+5. **Install for regular use**:
    ```bash
    npm install -g vsce
    vsce package
-   code --install-extension text-trigger-0.0.1.vsix
+   code --install-extension go-auto-continue-0.0.2.vsix
    ```
 
-That's it! Now the extension will automatically help you continue AI conversations when they hit limitations.
-========================
+## 🎯 How It Works
 
-> A lightweight VS Code/Cursor extension that automatically helps you continue AI conversations when they hit limitations or pause.
+The extension provides a simple control panel in VS Code's Activity Bar where you can:
 
-## Problem Statement
+1. **Start Auto-Continue**: Click the start button to begin automatic message sending
+2. **Configure Settings**: Set custom interval (1-60 seconds) and message text
+3. **Monitor Status**: Visual indicators show when the extension is active
+4. **Stop Anytime**: One-click stop when you need manual control
 
-When working with AI coding assistants like Cursor, you may encounter common limitations:
+### Default Settings
+- **Interval**: 10 seconds between messages
+- **Message**: "continue"
+- **Auto-start**: Disabled (manual control)
 
-- **Tool Call Limits**: Messages like "I've reached my tool call limit of 25" or "I need to pause execution"
-- **Token Limitations**: When the AI needs to break up responses due to length constraints
-- **Generation Pauses**: When the AI stops mid-generation and needs a prompt to continue
+## ⚙️ Configuration
 
-These interruptions disrupt your workflow, requiring manual intervention to type "continue" or similar phrases.
+Access settings through:
+- Click the settings button in the control panel
+- Or go to `File > Preferences > Settings` and search for "Go Auto Continue"
 
-## Solution
+Available settings:
+- `goAutoContinue.interval`: Time between messages (1-60 seconds)
+- `goAutoContinue.message`: Text to send (default: "continue")
 
-This simple extension watches your editor content for specific trigger phrases (like error messages about tool call limits) and automatically inserts the text "continue" into your chat window, allowing the AI to resume operation without manual intervention.
+## 🚀 Usage
 
-## Installation
+1. Open VS Code/Cursor with an AI chat active
+2. Look for the GO icon in the Activity Bar (left sidebar)
+3. Click to open the control panel
+4. Click "START" to begin auto-continue mode
+5. The extension will automatically send your configured message at set intervals
+6. Click "STOP" when you want to resume manual control
 
-1. Clone this repository or create the files from scratch:
-   ```bash
-   git clone https://github.com/yourusername/cursor-continue-extension.git
-   cd cursor-continue-extension
-   ```
+## 🛠️ Development
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Build the extension:
-   ```bash
-   npm run compile
-   ```
-
-4. To test in development mode:
-   - Press F5 in VS Code with this project open
-   - This launches a new Extension Development Host window with the extension loaded
-
-5. To install for regular use:
-   - Package the extension: `vsce package`
-   - Install the generated .vsix file: `code --install-extension text-trigger-0.0.1.vsix`
-
-## Usage
-
-Once installed, the extension automatically watches your editor content for trigger phrases.
-
-### Default Triggers
-
-| Trigger Text | Response |
-|--------------|----------|
-| "I've reached my tool call limit of 25" | "continue" |
-| "I need to pause execution" | "continue" |
-| "To proceed with the remaining" | "continue" |
-| "Would you like me to continue" | "Yes, please continue" |
-
-### How It Works
-
-The extension:
-1. Polls the active editor content every 500ms
-2. Checks for any of the trigger phrases
-3. When detected, automatically replaces the trigger with the corresponding response
-4. The AI detects this as user input and continues its operation
-
-### Example Scenarios
-
-#### Cursor Tool Call Limits
-
-When Cursor outputs:
+### Project Structure
 ```
-I've reached my tool call limit of 25. Would you like me to continue?
+go-auto-continue/
+├── src/
+│   ├── extension.ts      # Main extension logic
+│   └── i18n.ts          # Internationalization
+├── resources/
+│   └── go-icon.svg      # Custom icon
+├── package.json         # Extension manifest
+├── package.nls.json     # English translations
+├── package.nls.ru.json  # Russian translations
+└── tsconfig.json        # TypeScript config
 ```
 
-The extension will automatically replace this with:
-```
-continue
-```
-
-Allowing Cursor to immediately resume execution.
-
-#### Long Generation Splits
-
-When the AI says:
-```
-This is a complex task. To proceed with the remaining steps, please let me know.
+### Building from Source
+```bash
+git clone https://github.com/dealenx/go-auto-continue.git
+cd go-auto-continue
+npm install
+npm run compile
+npm run watch  # For development
 ```
 
-The extension will automatically insert "continue", prompting the AI to continue with the next part of the response.
 
-## Customization
+## 🤝 Contributing
 
-You can easily add your own triggers by modifying the `triggerResponses` object in `extension.ts`:
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-```typescript
-const triggerResponses: { [key: string]: string } = {
-    "I've reached my tool call limit of 25": "continue",
-    "I need to pause execution": "continue",
-    "To proceed with the remaining": "continue",
-    "Would you like me to continue": "Yes, please continue",
-    // Add your custom triggers here
-    "Your custom trigger phrase": "Your custom response"
-};
-```
+### Development Setup
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Configuration
+## 📄 License
 
-This extension is intentionally minimal with no external configuration. Customize by directly editing the source code.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Limitations
+## 🔗 Links
 
-- The polling approach (checking every 500ms) is simple but may miss very fast interactions
-- Only works in the active editor window
-- May not work with all AI interfaces depending on how they handle text input
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=dealenx.go-auto-continue)
+- [GitHub Repository](https://github.com/dealenx/go-auto-continue)
+- [Issues & Bug Reports](https://github.com/dealenx/go-auto-continue/issues)
 
-## License
+## ⭐ Support
 
-MIT
-
-## Contributing
-
-Pull requests welcome! This is an intentionally minimal tool that solves a specific pain point.
+If you find this extension helpful, please consider:
+- ⭐ Starring the repository
+- 🐛 Reporting bugs
+- 💡 Suggesting new features
+- 📢 Sharing with others
 
 ---
 
-*Note: This extension is not officially affiliated with Cursor, Anthropic, or any other AI assistant provider.*
+*This extension is not officially affiliated with VS Code or any AI assistant provider.*
