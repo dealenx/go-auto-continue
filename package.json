@@ -2,7 +2,7 @@
   "name": "go-auto-continue",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "dealenx",
   "icon": "resources/screen.png",
   "repository": {
@@ -35,27 +35,17 @@
       {
         "command": "goAutoContinue.start",
         "title": "%command.start.title%",
-        "icon": "$(play)"
+        "icon": "$(robot)"
       },
       {
         "command": "goAutoContinue.stop",
         "title": "%command.stop.title%",
-        "icon": "$(stop)"
+        "icon": "$(stop-circle)"
       },
       {
         "command": "goAutoContinue.toggle",
         "title": "%command.toggle.title%",
         "icon": "$(play-circle)"
-      },
-      {
-        "command": "goAutoContinue.startMonitor",
-        "title": "Запустить умный мониторинг",
-        "icon": "$(robot)"
-      },
-      {
-        "command": "goAutoContinue.stopMonitor",
-        "title": "Остановить умный мониторинг",
-        "icon": "$(stop-circle)"
       },
       {
         "command": "goAutoContinue.openSettings",
@@ -84,24 +74,12 @@
     "configuration": {
       "title": "%config.title%",
       "properties": {
-        "goAutoContinue.interval": {
-          "type": "number",
-          "default": 10,
-          "minimum": 1,
-          "maximum": 60,
-          "description": "%config.interval.description%"
-        },
-        "goAutoContinue.message": {
-          "type": "string",
-          "default": "continue",
-          "description": "%config.message.description%"
-        },
-        "goAutoContinue.monitorInterval": {
+        "goAutoContinue.checkInterval": {
           "type": "number",
           "default": 5,
           "minimum": 1,
           "maximum": 30,
-          "description": "Интервал проверки изменений в чате (в секундах) для умного мониторинга"
+          "description": "Интервал проверки изменений в чате (в секундах)"
         },
         "goAutoContinue.pauseThreshold": {
           "type": "number",
@@ -110,10 +88,15 @@
           "maximum": 300,
           "description": "Время ожидания без изменений перед отправкой сообщения (в секундах)"
         },
+        "goAutoContinue.message": {
+          "type": "string",
+          "default": "continue",
+          "description": "%config.message.description%"
+        },
         "goAutoContinue.enableLogging": {
           "type": "boolean",
           "default": true,
-          "description": "Включить детальное логирование для умного мониторинга"
+          "description": "Включить детальное логирование"
         }
       }
     },
