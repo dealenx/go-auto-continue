@@ -1,13 +1,25 @@
 // extension.ts
 import * as vscode from "vscode";
 import { t } from "./i18n";
+import { ChatMonitor, ChatMonitorConfig } from "./chatMonitor";
 
 let continueInterval: NodeJS.Timeout | undefined;
 let isRunning = false;
 let treeDataProvider: GoAutoContinueTreeProvider;
+let chatMonitor: ChatMonitor;
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log(t('extension.activated'));
+  console.log(t("extension.activated"));
+
+  // Инициализируем ChatMonitor
+  const monitorConfig: ChatMonitorConfig = {
+    checkInterval: 5, // Проверяем каждые 5 секунд
+    pauseThreshold: 10, // Пауза 10 секунд считается бездействием
+    continueMessage: "continue",
+    enableLogging: true,
+  };
+
+  chatMonitor = new ChatMonitor(context, monitorConfig);
 
   // Создать Tree View Provider
   treeDataProvider = new GoAutoContinueTreeProvider();
@@ -45,6 +57,23 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  // Команда для запуска нового мониторинга чата
+  const startMonitorCommand = vscode.commands.registerCommand(
+    "goAutoContinue.startMonitor",
+    () => {
+      chatMonitor.start();
+      treeDataProvider.refresh();
+    }
+  );
+
+  const stopMonitorCommand = vscode.commands.registerCommand(
+    "goAutoContinue.stopMonitor",
+    () => {
+      chatMonitor.stop();
+      treeDataProvider.refresh();
+    }
+  );
+
   // Команда для открытия настроек
   const openSettingsCommand = vscode.commands.registerCommand(
     "goAutoContinue.openSettings",
@@ -60,6 +89,8 @@ export function activate(context: vscode.ExtensionContext) {
     startCommand,
     stopCommand,
     toggleCommand,
+    startMonitorCommand,
+    stopMonitorCommand,
     openSettingsCommand
   );
 
@@ -68,6 +99,16 @@ export function activate(context: vscode.ExtensionContext) {
     (event) => {
       if (event.affectsConfiguration("goAutoContinue")) {
         treeDataProvider.refresh();
+
+        // Обновляем конфигурацию мониторинга
+        const config = vscode.workspace.getConfiguration("goAutoContinue");
+        const newMonitorConfig: ChatMonitorConfig = {
+          checkInterval: config.get<number>("monitorInterval", 5),
+          pauseThreshold: config.get<number>("pauseThreshold", 10),
+          continueMessage: config.get<string>("message", "continue"),
+          enableLogging: config.get<boolean>("enableLogging", true),
+        };
+        chatMonitor.updateConfig(newMonitorConfig);
 
         // Если режим запущен, перезапускаем с новыми настройками
         if (isRunning) {
@@ -103,28 +144,65 @@ class GoAutoContinueTreeProvider
   getChildren(): GoAutoContinueItem[] {
     const items: GoAutoContinueItem[] = [];
 
-    // Главная кнопка управления
+    // Главная кнопка управления старого режима
     if (isRunning) {
       items.push(
         new GoAutoContinueItem(
-          t('button.stop'),
-          t('tooltip.stop'),
+          t("button.stop"),
+          t("tooltip.stop"),
           vscode.TreeItemCollapsibleState.None,
           {
             command: "goAutoContinue.stop",
-            title: t('action.stop'),
+            title: t("action.stop"),
           }
         )
       );
     } else {
       items.push(
         new GoAutoContinueItem(
-          t('button.start'),
-          t('tooltip.start'),
+          t("button.start"),
+          t("tooltip.start"),
           vscode.TreeItemCollapsibleState.None,
           {
             command: "goAutoContinue.start",
-            title: t('action.start'),
+            title: t("action.start"),
+          }
+        )
+      );
+    }
+
+    // Разделитель
+    items.push(
+      new GoAutoContinueItem(
+        "── Умный мониторинг ──",
+        "Новый режим мониторинга чата через workbench.action.chat.export",
+        vscode.TreeItemCollapsibleState.None,
+        undefined
+      )
+    );
+
+    // Кнопки для нового мониторинга чата
+    if (chatMonitor && chatMonitor.isActive()) {
+      items.push(
+        new GoAutoContinueItem(
+          "🛑 Остановить мониторинг",
+          `Остановить умный мониторинг чата. Статус: ${chatMonitor.getStatus()}`,
+          vscode.TreeItemCollapsibleState.None,
+          {
+            command: "goAutoContinue.stopMonitor",
+            title: "Остановить мониторинг",
+          }
+        )
+      );
+    } else {
+      items.push(
+        new GoAutoContinueItem(
+          "🤖 Запустить мониторинг",
+          "Запустить умный мониторинг чата с использованием workbench.action.chat.export",
+          vscode.TreeItemCollapsibleState.None,
+          {
+            command: "goAutoContinue.startMonitor",
+            title: "Запустить мониторинг",
           }
         )
       );
@@ -137,12 +215,12 @@ class GoAutoContinueTreeProvider
 
     items.push(
       new GoAutoContinueItem(
-        t('button.settings'),
-        t('tooltip.settings', intervalSeconds.toString(), message),
+        t("button.settings"),
+        t("tooltip.settings", intervalSeconds.toString(), message),
         vscode.TreeItemCollapsibleState.None,
         {
           command: "goAutoContinue.openSettings",
-          title: t('action.openSettings'),
+          title: t("action.openSettings"),
         }
       )
     );
@@ -180,7 +258,7 @@ function startContinueMode() {
   }, intervalSeconds * 1000); // Конвертируем секунды в миллисекунды
 
   vscode.window.showInformationMessage(
-    t('message.started', message, intervalSeconds.toString())
+    t("message.started", message, intervalSeconds.toString())
   );
   treeDataProvider.refresh();
 }
@@ -196,11 +274,14 @@ function stopContinueMode() {
     continueInterval = undefined;
   }
 
-  vscode.window.showInformationMessage(t('message.stopped'));
+  vscode.window.showInformationMessage(t("message.stopped"));
   treeDataProvider.refresh();
 }
 
 export function deactivate() {
   stopContinueMode();
-  console.log(t('extension.deactivated'));
+  if (chatMonitor) {
+    chatMonitor.dispose();
+  }
+  console.log(t("extension.deactivated"));
 }

@@ -48,6 +48,16 @@
         "icon": "$(play-circle)"
       },
       {
+        "command": "goAutoContinue.startMonitor",
+        "title": "Запустить умный мониторинг",
+        "icon": "$(robot)"
+      },
+      {
+        "command": "goAutoContinue.stopMonitor",
+        "title": "Остановить умный мониторинг",
+        "icon": "$(stop-circle)"
+      },
+      {
         "command": "goAutoContinue.openSettings",
         "title": "%command.openSettings.title%",
         "icon": "$(gear)"
@@ -85,6 +95,25 @@
           "type": "string",
           "default": "continue",
           "description": "%config.message.description%"
+        },
+        "goAutoContinue.monitorInterval": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 30,
+          "description": "Интервал проверки изменений в чате (в секундах) для умного мониторинга"
+        },
+        "goAutoContinue.pauseThreshold": {
+          "type": "number",
+          "default": 10,
+          "minimum": 5,
+          "maximum": 300,
+          "description": "Время ожидания без изменений перед отправкой сообщения (в секундах)"
+        },
+        "goAutoContinue.enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Включить детальное логирование для умного мониторинга"
         }
       }
     },
